@@ -14,6 +14,6 @@
 
 4. `(selenium-env)$ pip install -r requirements.txt`
 
-Запускаем скрипт для проверки работы:
+Запускаем тесты:
 
-5. `(selenium-env)$ pytest -v --tb=line --language=en test_main_page.py`
+5. `(selenium-env)$ pytest -v --tb=line --language=en -m need_review`
