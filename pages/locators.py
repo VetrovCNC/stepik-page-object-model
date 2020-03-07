@@ -17,3 +17,4 @@ class ProductPageLocators():
     PRODUCT_TITLE = (By.CSS_SELECTOR, 'div.product_main>h1')
     MESSAGE_PRODUCT_TITLE = (By.CSS_SELECTOR, '#messages .alertinner>strong')
     MESSAGE_COST_BASKET = (By.CSS_SELECTOR, '#messages .alertinner>p>strong')
+    SUCCESS_MESSAGE = (By.CSS_SELECTOR, '#messages .alert-success')

@@ -32,9 +32,18 @@ class ProductPage(BasePage):
     def check_message_product_has_been_added_to_basket(self):
         title = self.get_product_title()
         title_from_message = self.get_message_product_title()
-        assert title == title_from_message, f'Expected "{title}", but "{title_from_message}" was received'
+        assert title == title_from_message, \
+            f'Expected "{title}", but "{title_from_message}" was received'
 
     def check_message_cost_of_the_basket(self):
         price = self.get_product_price()
         cost_basket_from_message = self.get_message_cost_basket()
         assert price == cost_basket_from_message, f'Expected "{price}", but "{cost_basket_from_message}" was received'
+
+    def should_not_be_success_message(self):
+        assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Success message is presented, but should not be"
+
+    def should_be_disappeared_success_message(self):
+        assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Success message is not disappeared, but should was"
