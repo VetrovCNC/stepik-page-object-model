@@ -1,8 +1,11 @@
 import time
 import pytest
 
+from pages.main_page import MainPage
+from pages.login_page import LoginPage
 from pages.product_page import ProductPage
 from pages.basket_page import BasketPage
+from pages.locators import MainPageLocators
 
 
 @pytest.mark.parametrize('link', [
@@ -81,3 +84,39 @@ def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     basket_page.should_not_be_products()
     # Ожидаем, что есть текст о том что корзина пуста
     basket_page.should_be_empty_basket_message()
+
+
+@pytest.mark.register_user
+class TestUserAddToBasketFromProductPage():
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        link = MainPageLocators.LINK
+        page = MainPage(browser, link)
+        page.open()
+        # открываем страницу регистрации
+        page.go_to_login_page()
+        login_page = LoginPage(browser, browser.current_url)
+        # регистрируем нового пользователя
+        email = str(time.time()) + "@fakemail.org"
+        password = "nhuGT56ssewGFH"
+        login_page.register_new_user(email, password)
+        # проверяем, что пользователь залогинен
+        login_page.should_be_authorized_user()
+        yield
+
+    def test_user_cant_see_success_message(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+        page = ProductPage(browser, link)
+        # Открываем страницу товара
+        page.open()
+        # Проверяем, что нет сообщения об успехе с помощью is_not_element_present
+        page.should_not_be_success_message()
+
+    def test_user_can_add_product_to_basket(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+        page = ProductPage(browser, link)
+        page.open()
+        page.add_product_to_basket()
+        page.solve_quiz_and_get_code()
+        page.check_message_product_has_been_added_to_basket()
+        page.check_message_cost_of_the_basket()
